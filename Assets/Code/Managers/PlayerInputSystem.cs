@@ -4,9 +4,19 @@ using UnityEngine.InputSystem;
 public class PlayerInputSystem : MonoBehaviour
 {
     CharacterControls characterControls;
-    [SerializeField] Vector2 movementInput;
-    [SerializeField] float testInput;
+
     [SerializeField] int playerNumber;
+    [Header("Player Movement Input")]
+
+
+    [SerializeField] Vector2 movementInput;
+
+
+    [Header("Player Mini Abilities Input")]
+
+
+
+
     private void OnEnable()
     {
         if (characterControls == null)
