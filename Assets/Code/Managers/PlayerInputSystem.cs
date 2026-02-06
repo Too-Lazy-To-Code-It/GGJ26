@@ -5,7 +5,7 @@ public class PlayerInputSystem : MonoBehaviour
 {
     CharacterControls characterControls;
 
-    [SerializeField] int playerNumber;
+ 
     [Header("Player Movement Input")]
 
 
@@ -13,7 +13,7 @@ public class PlayerInputSystem : MonoBehaviour
 
 
     [Header("Player Mini Abilities Input")]
-
+    [SerializeField] int playerNumber;
 
 
 
