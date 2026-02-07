@@ -29,6 +29,8 @@ namespace Code.Managers
 
         private bool isDashing;
         private Vector2 dashDirection;
+        [Header("ground Settings")]
+        public bool ground = true;
         private void Awake()
         {
             playerHealth = GetComponent<Health>();
@@ -45,9 +47,11 @@ namespace Code.Managers
             if (PlayerInputSystem.instance.jump && jumpState == JumpState.canJump)
             playerRigidbody2D.linearVelocity = new Vector2(playerRigidbody2D.linearVelocity.x , jumpingPower);
             PlayerInputSystem.instance.HandleJumping();
+            jumpState = JumpState.cannotJump;
         }
         private void Update()
         {
+            CheckGround();
             HandleDash();
             HandleJump();
             HandleMovement();
@@ -64,7 +68,11 @@ namespace Code.Managers
         public void HealthDecrement()
         {
             playerHealth.Decrement();
-            speed += speedIncrement;
+            if (playerHealth.currentHP > 0)
+            {
+                speed += speedIncrement;
+            }
+           
         }
        [ContextMenu("test increment health")]
         public void HealthIncrement()
@@ -118,9 +126,15 @@ namespace Code.Managers
             playerRigidbody2D.gravityScale = originalGravity;
             isDashing = false;
         }
-
+        public void CheckGround()
+        {
+            if (playerRigidbody2D.linearVelocity.y == 0)
+            {
+                jumpState = JumpState.canJump;
+            }
+        }
     }
-
+  
 }
 
 public enum JumpState

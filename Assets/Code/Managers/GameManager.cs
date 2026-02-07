@@ -26,7 +26,8 @@ namespace Code.Managers
         
         public GameState State { get; private set; }
         public int ActivePlayerIndex { get; private set; }   
-        public int PreviousPlayerIndex { get; private set; } 
+        public int PreviousPlayerIndex { get; private set; }
+        public PlayerManager player;
         
         float lastSwitchTime;
         [SerializeField] float switchCooldown = 0.3f;

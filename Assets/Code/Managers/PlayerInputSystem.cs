@@ -42,7 +42,7 @@ public class PlayerInputSystem : MonoBehaviour
             characterControls.PlayerMovement.Movement.performed += ctx =>
             {
                 if (ctx.control.device is Gamepad gamepad &&
-                    gamepad == Gamepad.all[playerNumber]) 
+                    gamepad == Gamepad.all[GameManager.Instance.ActivePlayerIndex]) 
                 {
                     movementInput = ctx.ReadValue<Vector2>();
                 }
@@ -50,7 +50,7 @@ public class PlayerInputSystem : MonoBehaviour
             characterControls.PlayerMovement.Jump.performed += jumping =>
             {
                 if (jumping.control.device is Gamepad gamepad &&
-                    gamepad == Gamepad.all[playerNumber])
+                    gamepad == Gamepad.all[GameManager.Instance.ActivePlayerIndex])
                 {
                     jump = true;
                 }
@@ -58,7 +58,7 @@ public class PlayerInputSystem : MonoBehaviour
             characterControls.PlayerMovement.Dash.performed += Dash =>
             {
                 if (Dash.control.device is Gamepad gamepad &&
-                                    gamepad == Gamepad.all[playerNumber])
+                                    gamepad == Gamepad.all[GameManager.Instance.ActivePlayerIndex])
                 {
                     dash = true;
 
@@ -68,7 +68,7 @@ public class PlayerInputSystem : MonoBehaviour
             characterControls.PlayerAbilities.PlayerInputs.performed += i =>
             {
                 if (i.control.device is Gamepad gamepad &&
-                                    gamepad == Gamepad.all[playerNumber])
+                                    gamepad == Gamepad.all[GameManager.Instance.ActivePlayerIndex])
                 {
                     abilityInput = true;
                 }
@@ -77,7 +77,7 @@ public class PlayerInputSystem : MonoBehaviour
             characterControls.PlayerAbilities.PlayerInputs.performed += miniAbility =>
             {
                 if (miniAbility.control.device is Gamepad gamepad &&
-                                    gamepad != Gamepad.all[playerNumber])
+                                    gamepad != Gamepad.all[GameManager.Instance.ActivePlayerIndex])
                 {
                     miniAbilityInput = true;
                 }
