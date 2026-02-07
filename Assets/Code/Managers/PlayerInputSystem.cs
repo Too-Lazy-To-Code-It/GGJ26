@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Code.Managers;
@@ -32,8 +33,14 @@ public class PlayerInputSystem : MonoBehaviour
             {
                 Destroy(gameObject);
             }
-            playerNumber = GameManager.Instance.ActivePlayerIndex;
+            
     }
+
+    private void Start()
+    {
+        playerNumber = GameManager.Instance.ActivePlayerIndex;
+    }
+
     private void OnEnable()
     {
         if (characterControls == null)
