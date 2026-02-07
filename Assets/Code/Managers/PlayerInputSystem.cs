@@ -9,8 +9,6 @@ public class PlayerInputSystem : MonoBehaviour
     [SerializeField] int playerNumber;
 
     [Header("Player Movement Input")]
-
-
     [SerializeField]public  Vector2 movementInput;
     [SerializeField] public float horizontalInput;
     [SerializeField] public float verticalInput;
@@ -19,8 +17,6 @@ public class PlayerInputSystem : MonoBehaviour
     [SerializeField] public bool dash = false;
 
     [Header("Player Mini/Strong Abilities Input")]
-
-
     [SerializeField] public bool abilityInput = false ;
     [SerializeField] public bool miniAbilityInput = false;
 
@@ -29,14 +25,14 @@ public class PlayerInputSystem : MonoBehaviour
     private void Awake()
     {
             if (instance == null)
-        {
-            instance = this;
-        }
+            {
+                instance = this;
+            }
             else
-        {
-            Destroy(gameObject);
-        }
-        playerNumber = GameManager.instance.playerInCharge;
+            {
+                Destroy(gameObject);
+            }
+            playerNumber = GameManager.Instance.ActivePlayerIndex;
     }
     private void OnEnable()
     {
@@ -103,6 +99,11 @@ public class PlayerInputSystem : MonoBehaviour
         HandleDash();
         HandleMovementInput();
        
+    }
+    
+    public void SetActivePlayer(int playerIndex)
+    {
+        playerNumber = playerIndex;
     }
     private void HandleAbility()
     {

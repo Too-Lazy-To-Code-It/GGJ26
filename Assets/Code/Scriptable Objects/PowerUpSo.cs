@@ -5,9 +5,9 @@ namespace Code.Scriptable_Objects
     [CreateAssetMenu(fileName = "PowerUps", menuName = "PowerUps")]
     public abstract class PowerUpSo : ScriptableObject
     {
-        public void Consume()
-        {
-            Destroy(this);
-        }
+        public float duration;
+
+        public abstract void Apply();
+        public abstract void Revert();
     }
 }

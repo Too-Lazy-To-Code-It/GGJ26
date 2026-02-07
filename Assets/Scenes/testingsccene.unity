@@ -129,6 +129,8 @@ GameObject:
   m_Component:
   - component: {fileID: 198363999}
   - component: {fileID: 198364000}
+  - component: {fileID: 198364001}
+  - component: {fileID: 198364002}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -163,11 +165,34 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99ee6079dbaa4da182a4e78ace242f84, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Code.Managers.GameManager
-  gameState: 0
-  playerInCharge: 0
-  lastInCharge: 0
-  player1: {fileID: 402739939}
-  player2: {fileID: 0}
+  switchCooldown: 0.3
+--- !u!114 &198364001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 198363998}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae44373b0dba4e6088fda309d3a14c91, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Code.Managers.DistanceSwitchController
+  runner: {fileID: 402739943}
+  checkDistance: 20
+  switchProbability: 0.3
+--- !u!114 &198364002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 198363998}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa4197558d6549d69bbd3361acfefd7c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Code.Triggers.PowerUpRunner
 --- !u!1 &402739938
 GameObject:
   m_ObjectHideFlags: 0
@@ -203,7 +228,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Code.Managers.PlayerManager
   playerCollider: {fileID: 402739941}
   playerRigidbody2D: {fileID: 402739940}
-  playerHealth: {fileID: 0}
+  playerHealth: {fileID: 402739944}
   verticalMovement: 0
   horizontalMovement: 0
   moveAmount: 0
@@ -366,7 +391,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Health
   maxHP: 3
-  currentHP: 0
+  currentHP: 3
 --- !u!1 &447346739
 GameObject:
   m_ObjectHideFlags: 0

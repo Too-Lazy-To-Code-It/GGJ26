@@ -1,28 +1,95 @@
 ﻿
 
 using System;
+using UnityEngine;
 
 namespace Code.Managers
 {
+    
+    public enum GameState
+    {
+        Menu,
+        Playing,
+        Paused,
+        GameOver
+    }
+
+    public enum SwitchReason
+    {
+        RNG,
+        PowerUp
+    }
     public class GameManager : UnityEngine.MonoBehaviour
     {
-        public int gameState = 0;
-        public int playerInCharge = 0;
-        public int lastInCharge = 0;
-        public PlayerManager player1;
-        public PlayerManager player2;
-        public static GameManager instance;
+
+        public static GameManager Instance { get; private set; }
+        
+        public GameState State { get; private set; }
+        public int ActivePlayerIndex { get; private set; }
+        public int PreviousPlayerIndex { get; private set; }
+        
+        float lastSwitchTime;
+        [SerializeField] float switchCooldown = 0.3f;
+
+
+        [ContextMenu("Test Switch")]
+        public void TestSwitch()
+        {
+            
+        }
+        private void Awake()
+        {
+            if (Instance != null)
+            {
+                Destroy(gameObject);
+                return;
+            }
+            Instance = this;
+        }
 
         private void Start()
         {
-            if (instance == null)
-            {
-                instance = this;
-            }
-            else
-            {
-                Destroy(gameObject);
-            }
+            State = GameState.Playing;
+            SetInitialPlayer(0);
+        }
+
+        private void Update()
+        {
+            if (State != GameState.Playing)
+                return;
+            
+        }
+
+        void SetInitialPlayer(int index)
+        {
+            ActivePlayerIndex = index;
+            PreviousPlayerIndex = -1;
+
+            PlayerInputSystem.instance.SetActivePlayer(index);
+        }
+        
+        public void SwitchActivePlayer(SwitchReason reason)
+        {
+            
+            if (Time.time - lastSwitchTime < switchCooldown)
+                return;
+
+            lastSwitchTime = Time.time;
+            
+            if (State != GameState.Playing)
+                return;
+
+            PreviousPlayerIndex = ActivePlayerIndex;
+            ActivePlayerIndex = 1 - ActivePlayerIndex;
+
+            PlayerInputSystem.instance.SetActivePlayer(ActivePlayerIndex);
+        }
+
+        public void TryRandomSwitch(float probability)
+        {
+
+            if (UnityEngine.Random.value < probability)
+                SwitchActivePlayer(SwitchReason.RNG);
         }
     }
 }
