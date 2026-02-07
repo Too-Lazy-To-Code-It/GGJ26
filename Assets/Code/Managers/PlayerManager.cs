@@ -31,6 +31,9 @@ namespace Code.Managers
         private Vector2 dashDirection;
         [Header("ground Settings")]
         public bool ground = true;
+        [Header("VFX Variables")]
+        public ParticleSystem changePlayerVFX;
+        public ParticleSystem jumpPlayerVFX;
         private void Awake()
         {
             playerHealth = GetComponent<Health>();
@@ -44,10 +47,19 @@ namespace Code.Managers
         }
         public void HandleJump()
         {
+          
+           
             if (PlayerInputSystem.instance.jump && jumpState == JumpState.canJump)
-            playerRigidbody2D.linearVelocity = new Vector2(playerRigidbody2D.linearVelocity.x , jumpingPower);
-            PlayerInputSystem.instance.HandleJumping();
-            jumpState = JumpState.cannotJump;
+            {
+                playerRigidbody2D.linearVelocity = new Vector2(playerRigidbody2D.linearVelocity.x, jumpingPower);
+                PlayerInputSystem.instance.HandleJumping();
+                jumpState = JumpState.cannotJump;
+                if (jumpPlayerVFX != null)
+                {
+                    jumpPlayerVFX.Play();
+                }
+            }
+           
         }
         private void Update()
         {
@@ -139,6 +151,11 @@ namespace Code.Managers
         }
         public void ChangePlayerJumpPushToNegative()
         {
+            if (changePlayerVFX != null)
+            {
+                changePlayerVFX.Play();
+            }
+           
             jumpingPower = -jumpingPower;
             playerRigidbody2D.gravityScale = -playerRigidbody2D.gravityScale;
         }

@@ -240,7 +240,7 @@ SpriteRenderer:
   m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_SpriteSortPoint: 0
 --- !u!4 &63311282
 Transform:
@@ -512,7 +512,7 @@ Transform:
   m_GameObject: {fileID: 402739938}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -0.3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -563,7 +563,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d43867f55ea1491eaece0917caf9d8e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Code.Triggers.PowerUpPickup
-  powerUp: {fileID: 11400000, guid: ecaf6c4116ca0774dae886483ccbe3ca, type: 2}
+  powerUp: {fileID: 11400000, guid: 669ce5af79864d645a00cd7d12ea08a4, type: 2}
 --- !u!61 &418793037
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -667,7 +667,7 @@ SpriteRenderer:
   m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_SpriteSortPoint: 0
 --- !u!4 &418793039
 Transform:
@@ -823,8 +823,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6749406154493c4d80a9e90c73399ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CameraFollow
-  FollowSpeed: 10
   target: {fileID: 402739943}
+  followSpeed: 5
+  minX: 0
+  maxX: 0
 --- !u!1 &873658596
 GameObject:
   m_ObjectHideFlags: 0

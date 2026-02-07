@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e079bfdc1ee1c78498bb61565744c379, type: 3}
   m_Name: New Depashing Power Up
   m_EditorClassIdentifier: Assembly-CSharp::DepashingPowerUp
-  duration: 0
+  duration: 2
