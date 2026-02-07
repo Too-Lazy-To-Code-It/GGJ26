@@ -25,16 +25,20 @@ namespace Code.Managers
         public static GameManager Instance { get; private set; }
         
         public GameState State { get; private set; }
-        public int ActivePlayerIndex { get; private set; }
-        public int PreviousPlayerIndex { get; private set; }
+        public int ActivePlayerIndex { get; private set; }   
+        public int PreviousPlayerIndex { get; private set; } 
         
         float lastSwitchTime;
         [SerializeField] float switchCooldown = 0.3f;
+        
+        const int PLAYER_COUNT = 2;
 
 
         [ContextMenu("Test Switch")]
         public void TestSwitch()
         {
+            TryRandomSwitch(1f); 
+            Debug.Log("RNG switch forced via context menu. ActivePlayerIndex: " + ActivePlayerIndex);
             
         }
         private void Awake()
