@@ -88,6 +88,7 @@ namespace Code.Managers
             ActivePlayerIndex = 1 - ActivePlayerIndex;
 
             PlayerInputSystem.instance.SetActivePlayer(ActivePlayerIndex);
+            ChangeGravityAndSprite();
         }
 
         public void TryRandomSwitch(float probability)
@@ -96,5 +97,17 @@ namespace Code.Managers
             if (UnityEngine.Random.value < probability)
                 SwitchActivePlayer(SwitchReason.RNG);
         }
-    }
+        public void ChangeGravity()
+        {
+            player.ChangePlayerJumpPushToNegative();
+
+        }
+        public void ChangeGravityAndSprite()
+        {
+            ChangeGravity();
+            player.ChangePlayerSprite();    
+        }
+
+
+        }
 }

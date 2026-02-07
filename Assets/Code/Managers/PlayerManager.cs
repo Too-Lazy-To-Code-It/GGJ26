@@ -133,7 +133,17 @@ namespace Code.Managers
                 jumpState = JumpState.canJump;
             }
         }
+        public void ChangePlayerSprite()
+        {
+
+        }
+        public void ChangePlayerJumpPushToNegative()
+        {
+            jumpingPower = -jumpingPower;
+            playerRigidbody2D.gravityScale = -playerRigidbody2D.gravityScale;
+        }
     }
+   
   
 }
 
