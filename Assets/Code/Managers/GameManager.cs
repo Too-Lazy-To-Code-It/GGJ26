@@ -11,10 +11,18 @@ namespace Code.Managers
         public int lastInCharge = 0;
         public PlayerManager player1;
         public PlayerManager player2;
+        public static GameManager instance;
 
         private void Start()
         {
-            
+            if (instance == null)
+            {
+                instance = this;
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
         }
     }
 }

@@ -102,13 +102,22 @@ public partial class @CharacterControls: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""PlayerInputs"",
-                    ""type"": ""Value"",
-                    ""id"": ""0e971a06-99d4-4135-95b6-1baa718b981a"",
-                    ""expectedControlType"": ""Integer"",
+                    ""name"": ""Jump"",
+                    ""type"": ""Button"",
+                    ""id"": ""eeb1fad3-1925-468e-8680-4ed2cc6f6005"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
-                    ""initialStateCheck"": true
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Dash"",
+                    ""type"": ""Button"",
+                    ""id"": ""abade82f-9ea4-4b71-8965-947e992dbfed"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -169,8 +178,47 @@ public partial class @CharacterControls: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""83be9634-0080-4d7e-97c5-a3722beb1eff"",
+                    ""id"": ""edfbb8c5-e211-4461-b0b3-02833d9dd7af"",
                     ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Jump"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""fbc94b6e-aad9-493c-b11d-883cd0ef78fd"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Dash"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
+            ""name"": ""PlayerAbilities"",
+            ""id"": ""25ce41fc-7885-4eb7-9283-b1dd9bf31603"",
+            ""actions"": [
+                {
+                    ""name"": ""PlayerInputs"",
+                    ""type"": ""Button"",
+                    ""id"": ""bc357b5a-3647-43e8-b4c9-114dc1195b1d"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""2fc671e0-de52-4445-8f1a-c28a647d668d"",
+                    ""path"": ""<Gamepad>/buttonEast"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -186,12 +234,17 @@ public partial class @CharacterControls: IInputActionCollection2, IDisposable
         // PlayerMovement
         m_PlayerMovement = asset.FindActionMap("PlayerMovement", throwIfNotFound: true);
         m_PlayerMovement_Movement = m_PlayerMovement.FindAction("Movement", throwIfNotFound: true);
-        m_PlayerMovement_PlayerInputs = m_PlayerMovement.FindAction("PlayerInputs", throwIfNotFound: true);
+        m_PlayerMovement_Jump = m_PlayerMovement.FindAction("Jump", throwIfNotFound: true);
+        m_PlayerMovement_Dash = m_PlayerMovement.FindAction("Dash", throwIfNotFound: true);
+        // PlayerAbilities
+        m_PlayerAbilities = asset.FindActionMap("PlayerAbilities", throwIfNotFound: true);
+        m_PlayerAbilities_PlayerInputs = m_PlayerAbilities.FindAction("PlayerInputs", throwIfNotFound: true);
     }
 
     ~@CharacterControls()
     {
         UnityEngine.Debug.Assert(!m_PlayerMovement.enabled, "This will cause a leak and performance issues, CharacterControls.PlayerMovement.Disable() has not been called.");
+        UnityEngine.Debug.Assert(!m_PlayerAbilities.enabled, "This will cause a leak and performance issues, CharacterControls.PlayerAbilities.Disable() has not been called.");
     }
 
     /// <summary>
@@ -268,7 +321,8 @@ public partial class @CharacterControls: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_PlayerMovement;
     private List<IPlayerMovementActions> m_PlayerMovementActionsCallbackInterfaces = new List<IPlayerMovementActions>();
     private readonly InputAction m_PlayerMovement_Movement;
-    private readonly InputAction m_PlayerMovement_PlayerInputs;
+    private readonly InputAction m_PlayerMovement_Jump;
+    private readonly InputAction m_PlayerMovement_Dash;
     /// <summary>
     /// Provides access to input actions defined in input action map "PlayerMovement".
     /// </summary>
@@ -285,9 +339,13 @@ public partial class @CharacterControls: IInputActionCollection2, IDisposable
         /// </summary>
         public InputAction @Movement => m_Wrapper.m_PlayerMovement_Movement;
         /// <summary>
-        /// Provides access to the underlying input action "PlayerMovement/PlayerInputs".
+        /// Provides access to the underlying input action "PlayerMovement/Jump".
         /// </summary>
-        public InputAction @PlayerInputs => m_Wrapper.m_PlayerMovement_PlayerInputs;
+        public InputAction @Jump => m_Wrapper.m_PlayerMovement_Jump;
+        /// <summary>
+        /// Provides access to the underlying input action "PlayerMovement/Dash".
+        /// </summary>
+        public InputAction @Dash => m_Wrapper.m_PlayerMovement_Dash;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -317,9 +375,12 @@ public partial class @CharacterControls: IInputActionCollection2, IDisposable
             @Movement.started += instance.OnMovement;
             @Movement.performed += instance.OnMovement;
             @Movement.canceled += instance.OnMovement;
-            @PlayerInputs.started += instance.OnPlayerInputs;
-            @PlayerInputs.performed += instance.OnPlayerInputs;
-            @PlayerInputs.canceled += instance.OnPlayerInputs;
+            @Jump.started += instance.OnJump;
+            @Jump.performed += instance.OnJump;
+            @Jump.canceled += instance.OnJump;
+            @Dash.started += instance.OnDash;
+            @Dash.performed += instance.OnDash;
+            @Dash.canceled += instance.OnDash;
         }
 
         /// <summary>
@@ -334,9 +395,12 @@ public partial class @CharacterControls: IInputActionCollection2, IDisposable
             @Movement.started -= instance.OnMovement;
             @Movement.performed -= instance.OnMovement;
             @Movement.canceled -= instance.OnMovement;
-            @PlayerInputs.started -= instance.OnPlayerInputs;
-            @PlayerInputs.performed -= instance.OnPlayerInputs;
-            @PlayerInputs.canceled -= instance.OnPlayerInputs;
+            @Jump.started -= instance.OnJump;
+            @Jump.performed -= instance.OnJump;
+            @Jump.canceled -= instance.OnJump;
+            @Dash.started -= instance.OnDash;
+            @Dash.performed -= instance.OnDash;
+            @Dash.canceled -= instance.OnDash;
         }
 
         /// <summary>
@@ -370,6 +434,102 @@ public partial class @CharacterControls: IInputActionCollection2, IDisposable
     /// Provides a new <see cref="PlayerMovementActions" /> instance referencing this action map.
     /// </summary>
     public PlayerMovementActions @PlayerMovement => new PlayerMovementActions(this);
+
+    // PlayerAbilities
+    private readonly InputActionMap m_PlayerAbilities;
+    private List<IPlayerAbilitiesActions> m_PlayerAbilitiesActionsCallbackInterfaces = new List<IPlayerAbilitiesActions>();
+    private readonly InputAction m_PlayerAbilities_PlayerInputs;
+    /// <summary>
+    /// Provides access to input actions defined in input action map "PlayerAbilities".
+    /// </summary>
+    public struct PlayerAbilitiesActions
+    {
+        private @CharacterControls m_Wrapper;
+
+        /// <summary>
+        /// Construct a new instance of the input action map wrapper class.
+        /// </summary>
+        public PlayerAbilitiesActions(@CharacterControls wrapper) { m_Wrapper = wrapper; }
+        /// <summary>
+        /// Provides access to the underlying input action "PlayerAbilities/PlayerInputs".
+        /// </summary>
+        public InputAction @PlayerInputs => m_Wrapper.m_PlayerAbilities_PlayerInputs;
+        /// <summary>
+        /// Provides access to the underlying input action map instance.
+        /// </summary>
+        public InputActionMap Get() { return m_Wrapper.m_PlayerAbilities; }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Enable()" />
+        public void Enable() { Get().Enable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Disable()" />
+        public void Disable() { Get().Disable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.enabled" />
+        public bool enabled => Get().enabled;
+        /// <summary>
+        /// Implicitly converts an <see ref="PlayerAbilitiesActions" /> to an <see ref="InputActionMap" /> instance.
+        /// </summary>
+        public static implicit operator InputActionMap(PlayerAbilitiesActions set) { return set.Get(); }
+        /// <summary>
+        /// Adds <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <param name="instance">Callback instance.</param>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c> or <paramref name="instance"/> have already been added this method does nothing.
+        /// </remarks>
+        /// <seealso cref="PlayerAbilitiesActions" />
+        public void AddCallbacks(IPlayerAbilitiesActions instance)
+        {
+            if (instance == null || m_Wrapper.m_PlayerAbilitiesActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_PlayerAbilitiesActionsCallbackInterfaces.Add(instance);
+            @PlayerInputs.started += instance.OnPlayerInputs;
+            @PlayerInputs.performed += instance.OnPlayerInputs;
+            @PlayerInputs.canceled += instance.OnPlayerInputs;
+        }
+
+        /// <summary>
+        /// Removes <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <remarks>
+        /// Calling this method when <paramref name="instance" /> have not previously been registered has no side-effects.
+        /// </remarks>
+        /// <seealso cref="PlayerAbilitiesActions" />
+        private void UnregisterCallbacks(IPlayerAbilitiesActions instance)
+        {
+            @PlayerInputs.started -= instance.OnPlayerInputs;
+            @PlayerInputs.performed -= instance.OnPlayerInputs;
+            @PlayerInputs.canceled -= instance.OnPlayerInputs;
+        }
+
+        /// <summary>
+        /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="PlayerAbilitiesActions.UnregisterCallbacks(IPlayerAbilitiesActions)" />.
+        /// </summary>
+        /// <seealso cref="PlayerAbilitiesActions.UnregisterCallbacks(IPlayerAbilitiesActions)" />
+        public void RemoveCallbacks(IPlayerAbilitiesActions instance)
+        {
+            if (m_Wrapper.m_PlayerAbilitiesActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        /// <summary>
+        /// Replaces all existing callback instances and previously registered input action callbacks associated with them with callbacks provided via <param cref="instance" />.
+        /// </summary>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c>, calling this method will only unregister all existing callbacks but not register any new callbacks.
+        /// </remarks>
+        /// <seealso cref="PlayerAbilitiesActions.AddCallbacks(IPlayerAbilitiesActions)" />
+        /// <seealso cref="PlayerAbilitiesActions.RemoveCallbacks(IPlayerAbilitiesActions)" />
+        /// <seealso cref="PlayerAbilitiesActions.UnregisterCallbacks(IPlayerAbilitiesActions)" />
+        public void SetCallbacks(IPlayerAbilitiesActions instance)
+        {
+            foreach (var item in m_Wrapper.m_PlayerAbilitiesActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_PlayerAbilitiesActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    /// <summary>
+    /// Provides a new <see cref="PlayerAbilitiesActions" /> instance referencing this action map.
+    /// </summary>
+    public PlayerAbilitiesActions @PlayerAbilities => new PlayerAbilitiesActions(this);
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "PlayerMovement" which allows adding and removing callbacks.
     /// </summary>
@@ -384,6 +544,28 @@ public partial class @CharacterControls: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnMovement(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Jump" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnJump(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Dash" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnDash(InputAction.CallbackContext context);
+    }
+    /// <summary>
+    /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "PlayerAbilities" which allows adding and removing callbacks.
+    /// </summary>
+    /// <seealso cref="PlayerAbilitiesActions.AddCallbacks(IPlayerAbilitiesActions)" />
+    /// <seealso cref="PlayerAbilitiesActions.RemoveCallbacks(IPlayerAbilitiesActions)" />
+    public interface IPlayerAbilitiesActions
+    {
         /// <summary>
         /// Method invoked when associated input action "PlayerInputs" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>

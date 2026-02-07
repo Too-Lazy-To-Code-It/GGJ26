@@ -8,6 +8,8 @@ namespace Code.Scriptable_Objects
     {
         public float coolDown;
         
-        public abstract void  Perform();
+        public abstract void  Perform(Rigidbody2D rigidbody2D, float cooldown ,PlayerInputSystem playerinputsystem);
+      
+
     }
 } 

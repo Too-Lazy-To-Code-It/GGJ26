@@ -16,13 +16,22 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "PlayerInputs",
-                    "type": "Value",
-                    "id": "0e971a06-99d4-4135-95b6-1baa718b981a",
-                    "expectedControlType": "Integer",
+                    "name": "Jump",
+                    "type": "Button",
+                    "id": "eeb1fad3-1925-468e-8680-4ed2cc6f6005",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": true
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Dash",
+                    "type": "Button",
+                    "id": "abade82f-9ea4-4b71-8965-947e992dbfed",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -83,8 +92,47 @@
                 },
                 {
                     "name": "",
-                    "id": "83be9634-0080-4d7e-97c5-a3722beb1eff",
+                    "id": "edfbb8c5-e211-4461-b0b3-02833d9dd7af",
                     "path": "<Gamepad>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Jump",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "fbc94b6e-aad9-493c-b11d-883cd0ef78fd",
+                    "path": "<Gamepad>/rightTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Dash",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "PlayerAbilities",
+            "id": "25ce41fc-7885-4eb7-9283-b1dd9bf31603",
+            "actions": [
+                {
+                    "name": "PlayerInputs",
+                    "type": "Button",
+                    "id": "bc357b5a-3647-43e8-b4c9-114dc1195b1d",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "2fc671e0-de52-4445-8f1a-c28a647d668d",
+                    "path": "<Gamepad>/buttonEast",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
