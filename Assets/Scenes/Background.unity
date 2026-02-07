@@ -235,7 +235,7 @@ Transform:
   m_GameObject: {fileID: 288885531}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -33.62, y: 2.43, z: 0}
+  m_LocalPosition: {x: -41.63, y: 2.43, z: 0}
   m_LocalScale: {x: 0.4, y: 0.4, z: 0.4}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -680,7 +680,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Code.CameraScript.BackgroundController
   cam: {fileID: 1861089842}
-  parallaxEffect: 0.3
+  parallaxEffect: 0.2
 --- !u!1 &923774878
 GameObject:
   m_ObjectHideFlags: 0
@@ -1029,7 +1029,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 21.274498, y: -0.026968956}
+  m_Offset: {x: 14.327103, y: -0.026968956}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -1039,7 +1039,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 106.34715, y: 10.898754}
+  m_Size: {x: 83.26329, y: 10.898754}
   m_EdgeRadius: 0
 --- !u!4 &1374232050
 Transform:
@@ -1050,7 +1050,7 @@ Transform:
   m_GameObject: {fileID: 1374232048}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -10.188, y: 5.15632, z: 0}
+  m_LocalPosition: {x: -14.7, y: 5.15632, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1294,7 +1294,7 @@ Transform:
   m_GameObject: {fileID: 1689695105}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -33.62, y: 4.9999743, z: -10}
+  m_LocalPosition: {x: -33.915474, y: 4.999971, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1371,7 +1371,7 @@ Transform:
   m_GameObject: {fileID: 1861089842}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -33.62, y: 2.43, z: -10}
+  m_LocalPosition: {x: -41.63, y: 2.43, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1797,7 +1797,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Code.CameraScript.BackgroundController
   cam: {fileID: 1861089842}
-  parallaxEffect: 0.2
+  parallaxEffect: 0.15
 --- !u!1 &1992156212
 GameObject:
   m_ObjectHideFlags: 0
