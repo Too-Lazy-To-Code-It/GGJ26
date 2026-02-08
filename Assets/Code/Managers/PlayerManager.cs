@@ -8,6 +8,7 @@ namespace Code.Managers
 {
     public class PlayerManager : MonoBehaviour
     {
+        public static PlayerManager Instance;
         [Header("Player Information")]
         public Collider2D playerCollider;
         public Rigidbody2D playerRigidbody2D;
@@ -50,6 +51,12 @@ namespace Code.Managers
         private float freezeCooldownTimer = 0f;
         private void Awake()
         {
+            if(Instance == null)
+                Instance = this;
+            else
+            {
+                Destroy(this);
+            }
             playerHealth = GetComponent<Health>();
         }
         public void HandleMovement()
