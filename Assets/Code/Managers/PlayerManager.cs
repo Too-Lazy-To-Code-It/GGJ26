@@ -273,10 +273,6 @@ namespace Code.Managers
                 jumpState = JumpState.canJump;
             }
         }
-        public void ChangePlayerSprite()
-        {
-
-        }
         public void ChangePlayerJumpPushToNegative()
         {
             if (changePlayerVFX != null)

@@ -2,6 +2,7 @@
 
 using System;
 using UnityEngine;
+using UnityEngine.U2D.Animation;
 
 namespace Code.Managers
 {
@@ -19,18 +20,26 @@ namespace Code.Managers
         RNG,
         PowerUp
     }
-    public class GameManager : UnityEngine.MonoBehaviour
+    public class GameManager : MonoBehaviour
     {
 
         public static GameManager Instance { get; private set; }
         
         public GameState State { get; private set; }
+        
+        [Header("Player refs")]
         public int ActivePlayerIndex { get; private set; }   
         public int PreviousPlayerIndex { get; private set; }
         public PlayerManager player;
+        public SpriteResolver spriteResolver;
+        public string labelResolver;
+        
+        
         
         float lastSwitchTime;
         [SerializeField] float switchCooldown = 0.3f;
+        [SerializeField] private GameObject normalBackground;
+        [SerializeField] private GameObject reversedBackground;
         
         const int PLAYER_COUNT = 2;
 
@@ -41,6 +50,23 @@ namespace Code.Managers
             TryRandomSwitch(1f); 
             Debug.Log("RNG switch forced via context menu. ActivePlayerIndex: " + ActivePlayerIndex);
             
+        }
+
+        public void InitBackground()
+        {
+            normalBackground.SetActive(ActivePlayerIndex==0);
+            reversedBackground.SetActive(ActivePlayerIndex==1);
+                
+        }
+
+        public void InitPlayerSprite()
+        {
+            if (ActivePlayerIndex == 0)
+                labelResolver = "Human";
+            else if (ActivePlayerIndex == 1)
+                labelResolver = "Mask";
+            spriteResolver.SetCategoryAndLabel("PlayerIncontrol", labelResolver);
+
         }
         private void Awake()
         {
@@ -54,8 +80,13 @@ namespace Code.Managers
 
         private void Start()
         {
+            
             State = GameState.Playing;
             SetInitialPlayer(0);
+            spriteResolver = player.GetComponent<SpriteResolver>();
+            InitBackground();
+            InitPlayerSprite();
+            
         }
 
         private void Update()
@@ -90,6 +121,8 @@ namespace Code.Managers
             PlayerInputSystem.instance.SetActivePlayer(ActivePlayerIndex);
             ChangeGravityAndSprite();
             PlayerInputSystem.instance.humanInCharge = !PlayerInputSystem.instance.humanInCharge;
+            InitBackground();
+            InitPlayerSprite();
         }
 
         public void TryRandomSwitch(float probability)
@@ -106,7 +139,12 @@ namespace Code.Managers
         public void ChangeGravityAndSprite()
         {
             ChangeGravity();
-            player.ChangePlayerSprite();    
+            if(ActivePlayerIndex==1)
+                player.transform.rotation = Quaternion.Euler(180,0, 0);
+            else
+            {
+                player.transform.rotation = Quaternion.Euler(0, 0, 0);
+            }
         }
 
 
