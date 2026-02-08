@@ -89,6 +89,7 @@ namespace Code.Managers
 
             PlayerInputSystem.instance.SetActivePlayer(ActivePlayerIndex);
             ChangeGravityAndSprite();
+            PlayerInputSystem.instance.humanInCharge = !PlayerInputSystem.instance.humanInCharge;
         }
 
         public void TryRandomSwitch(float probability)

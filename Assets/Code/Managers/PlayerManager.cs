@@ -2,6 +2,7 @@
 using Code.Scriptable_Objects;
 using System.Collections.Generic;
 using System.Collections;
+using UnityEngine.InputSystem;
 
 namespace Code.Managers 
 {
@@ -22,11 +23,17 @@ namespace Code.Managers
         private Vector2 moveDirection;
         [Header("Player Abilities Information")]
         public AbilitiesData data;
-        public List<float> cooldownAbilities;
+        public GameObject PlatformAbility;
+        public bool canUseMiniAbilityHuman = true ;
+        public bool canUseMiniAbilityMask = true;
+        public bool canUseMajorAbilityHuman = true;
+        public bool canUseMajorAbilityMask = true;
+        public float cooldownAbilities;
+        
         [Header("Dash Settings")]
         public float dashForce = 20f;
         public float dashDuration = 0.15f;
-
+        public bool canUseDash = true;
         private bool isDashing;
         private Vector2 dashDirection;
         [Header("ground Settings")]
@@ -34,6 +41,13 @@ namespace Code.Managers
         [Header("VFX Variables")]
         public ParticleSystem changePlayerVFX;
         public ParticleSystem jumpPlayerVFX;
+        [Header("Freeze Ability")]
+        public float maxFreezeTime = 3f;        // max duration you can freeze
+        public float freezeCooldown = 2f;       // time it takes to refill after full use
+        private float freezeMeter = 0f;
+        private bool freezeActive = false;
+        private bool freezeLocked = false;      // true if meter hit max
+        private float freezeCooldownTimer = 0f;
         private void Awake()
         {
             playerHealth = GetComponent<Health>();
@@ -43,6 +57,13 @@ namespace Code.Managers
             if (isDashing)
                 return;
             playerRigidbody2D.linearVelocity = new Vector2(PlayerInputSystem.instance.horizontalInput * speed, playerRigidbody2D.linearVelocity.y);
+
+        }
+        public void AntiHandleMovement()
+        {
+            if (isDashing)
+                return;
+            playerRigidbody2D.linearVelocity = new Vector2(-1 * speed, playerRigidbody2D.linearVelocity.y);
 
         }
         public void HandleJump()
@@ -67,7 +88,8 @@ namespace Code.Managers
             HandleDash();
             HandleJump();
             HandleMovement();
-            
+            HandleMiniAbility();
+            HandleFreezeAbility();
         }
         public void PerformSkills()
         {
@@ -99,19 +121,55 @@ namespace Code.Managers
         {
             if (collision.collider.CompareTag("Enemies"))
             {
-                 HealthDecrement();
+                HealthDecrement();
+            }
+
+            if (collision.collider.CompareTag("Walls"))
+            {
+                if (jumpState == JumpState.cannotJump && !PlayerInputSystem.instance.humanInCharge)
+                {
+
+                    DashFunction2(new Vector2(-0.5f, 0.5f));
+                    playerRigidbody2D.gravityScale = -15;
+                }
+                if (jumpState == JumpState.cannotJump && PlayerInputSystem.instance.humanInCharge)
+                {
+
+                    DashFunction2(new Vector2(-0.5f, -0.5f));
+                    playerRigidbody2D.gravityScale = 15;
+                }
+
+            }
+            if (collision.collider.CompareTag("LWalls"))
+            {
+
+                if (jumpState == JumpState.cannotJump && !PlayerInputSystem.instance.humanInCharge)
+                {
+                    DashFunction2(new Vector2(0.5f, 0.5f));
+                    playerRigidbody2D.gravityScale =-15;
+                }
+                if (jumpState == JumpState.cannotJump && PlayerInputSystem.instance.humanInCharge)
+                {
+                    DashFunction2(new Vector2(0.5f, -0.5f));
+                    playerRigidbody2D.gravityScale = 15;
+                }
+
             }
         }
         public void HandleDash()
         {
-            if (!PlayerInputSystem.instance.dash || isDashing)
-                return;
 
+            if (canUseDash && PlayerInputSystem.instance.dash)
+            {
+                StartCoroutine(DashCoroutineFunction());
+            }
+        }
+        public void DashFunction(Vector2 input)
+        {
+           
+            Debug.Log("TESTAAAAAAAAAAA");
             // Read input direction
-            Vector2 inputDir = new Vector2(
-                PlayerInputSystem.instance.horizontalInput,
-                PlayerInputSystem.instance.verticalInput
-            );
+            Vector2 inputDir = input;
 
             // If no input, dash forward (right as default)
             if (inputDir == Vector2.zero)
@@ -119,19 +177,89 @@ namespace Code.Managers
 
             dashDirection = inputDir.normalized;
 
-            StartCoroutine(DashCoroutine());
+            StartCoroutine(DashCoroutine(dashForce));
 
             // consume input
             PlayerInputSystem.instance.HandleDash();
         }
-        private IEnumerator DashCoroutine()
+        public void DashFunction2(Vector2 input)
+        {
+
+            Debug.Log("TESTAAAAAAAAAAA");
+            // Read input direction
+            Vector2 inputDir = input;
+
+            // If no input, dash forward (right as default)
+            if (inputDir == Vector2.zero)
+                inputDir = Vector2.right;
+
+            dashDirection = inputDir.normalized;
+
+            StartCoroutine(DashCoroutine(25));
+
+            // consume input
+            PlayerInputSystem.instance.HandleDash();
+        }
+        private IEnumerator DashCoroutineFunction()
+        {
+            DashFunction(new Vector2(
+                PlayerInputSystem.instance.horizontalInput,
+                PlayerInputSystem.instance.verticalInput
+            ));
+            canUseDash = false;
+            yield return new WaitForSeconds(5f);
+
+            canUseDash = true;
+        }
+        public void HandleMiniAbility()
+        {
+           
+            if (PlayerInputSystem.instance.miniAbilityInput && PlayerInputSystem.instance.humanInCharge == false && canUseMiniAbilityMask)
+            {
+                StartCoroutine(MiniAbilityCoroutineMask());
+            }
+            if (PlayerInputSystem.instance.miniAbilityInput && PlayerInputSystem.instance.humanInCharge == true && canUseMiniAbilityHuman)
+            {
+                //StartCoroutine(MiniAbilityCoroutineMask());
+            }
+        }
+
+        private IEnumerator MiniAbilityCoroutineMask()
+        {
+            canUseMiniAbilityMask = false;
+            GameObject gameObject = Instantiate(PlatformAbility, transform.position, transform.rotation);
+            yield return new WaitForSeconds(5f);
+            Destroy(gameObject);
+            canUseMiniAbilityMask = true;
+        }
+        public void HandleMajorAbility()
+        {
+
+            if (PlayerInputSystem.instance.abilityInput && PlayerInputSystem.instance.humanInCharge == false)
+            {
+                //StartCoroutine();
+            }
+            if (PlayerInputSystem.instance.abilityInput && PlayerInputSystem.instance.humanInCharge == true)
+            {
+                //StartCoroutine();
+            }
+        }
+        private IEnumerator MajorAbilityCoroutineMask()
+        {
+            canUseMajorAbilityMask = false;
+            GameObject gameObject = Instantiate(PlatformAbility, transform.position, transform.rotation);
+            yield return new WaitForSeconds(5f);
+            Destroy(gameObject);
+            canUseMiniAbilityMask = true;
+        }
+        private IEnumerator DashCoroutine(float dashForcee)
         {
             isDashing = true;
 
             float originalGravity = playerRigidbody2D.gravityScale;
             playerRigidbody2D.gravityScale = 0f;
 
-            playerRigidbody2D.linearVelocity = dashDirection * dashForce;
+            playerRigidbody2D.linearVelocity = dashDirection * dashForcee;
 
             yield return new WaitForSeconds(dashDuration);
 
@@ -158,6 +286,42 @@ namespace Code.Managers
            
             jumpingPower = -jumpingPower;
             playerRigidbody2D.gravityScale = -playerRigidbody2D.gravityScale;
+        }
+
+
+        void HandleFreezeAbility()
+        {
+            // Activate ability if input is pressed and not locked
+            if (PlayerInputSystem.instance.stop && !freezeLocked)
+            {
+                freezeActive = true;
+                AntiHandleMovement();
+                freezeMeter += Time.deltaTime;
+
+                if (freezeMeter >= maxFreezeTime)
+                {
+                    freezeMeter = maxFreezeTime;
+                    freezeLocked = true;
+                    freezeActive = false;        // auto-stop if fully used
+                    freezeCooldownTimer = freezeCooldown;
+                }
+            }
+            else
+            {
+                // Release early
+                freezeActive = false;
+            }
+
+            // Handle cooldown if locked
+            if (freezeLocked)
+            {
+                freezeCooldownTimer -= Time.deltaTime;
+                if (freezeCooldownTimer <= 0f)
+                {
+                    freezeLocked = false;
+                    freezeMeter = 0f;  // reset meter
+                }
+            }
         }
     }
    

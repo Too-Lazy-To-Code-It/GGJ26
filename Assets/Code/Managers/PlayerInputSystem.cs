@@ -16,10 +16,12 @@ public class PlayerInputSystem : MonoBehaviour
     [SerializeField] public float moveAmount;
     [SerializeField] public bool jump = false;
     [SerializeField] public bool dash = false;
+    [SerializeField] public bool stop = false;
 
     [Header("Player Mini/Strong Abilities Input")]
     [SerializeField] public bool abilityInput = false ;
     [SerializeField] public bool miniAbilityInput = false;
+    [SerializeField] public bool humanInCharge = false;
 
 
 
@@ -72,6 +74,16 @@ public class PlayerInputSystem : MonoBehaviour
                 }
 
             };
+            characterControls.PlayerMovement.Stop.performed += Stop =>
+            {
+                if (Stop.control.device is Gamepad gamepad &&
+                                    gamepad == Gamepad.all[GameManager.Instance.ActivePlayerIndex])
+                {
+                    stop = true;
+
+                }
+
+            };
             characterControls.PlayerAbilities.PlayerInputs.performed += i =>
             {
                 if (i.control.device is Gamepad gamepad &&
@@ -105,7 +117,7 @@ public class PlayerInputSystem : MonoBehaviour
         HandleMiniAbility();
         HandleDash();
         HandleMovementInput();
-       
+        HandleStop();
     }
     
     public void SetActivePlayer(int playerIndex)
@@ -141,7 +153,15 @@ public class PlayerInputSystem : MonoBehaviour
         if (dash)
         {
             dash = false;
-            Debug.Log("test jump");
+            Debug.Log("test dash");
+        }
+    }
+    public void HandleStop()
+    {
+        if (stop)
+        {
+            stop = false;
+            Debug.Log("test stop");
         }
     }
     private void HandleMovementInput()

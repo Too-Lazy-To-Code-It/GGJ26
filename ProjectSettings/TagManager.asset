@@ -5,6 +5,10 @@ TagManager:
   serializedVersion: 3
   tags:
   - Enemies
+  - FxTemporaire
+  - Walls
+  - Lwalls
+  - LWalls
   layers:
   - Default
   - TransparentFX
