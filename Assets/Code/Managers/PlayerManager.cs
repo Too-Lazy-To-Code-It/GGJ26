@@ -140,13 +140,13 @@ namespace Code.Managers
                 {
 
                     DashFunction2(new Vector2(-0.5f, 0.5f));
-                    playerRigidbody2D.gravityScale = -15;
+                    playerRigidbody2D.gravityScale = 15;
                 }
                 if (jumpState == JumpState.cannotJump && PlayerInputSystem.instance.humanInCharge)
                 {
 
                     DashFunction2(new Vector2(-0.5f, -0.5f));
-                    playerRigidbody2D.gravityScale = 15;
+                    playerRigidbody2D.gravityScale = -15;
                 }
 
             }
@@ -156,12 +156,12 @@ namespace Code.Managers
                 if (jumpState == JumpState.cannotJump && !PlayerInputSystem.instance.humanInCharge)
                 {
                     DashFunction2(new Vector2(0.5f, 0.5f));
-                    playerRigidbody2D.gravityScale =-15;
+                    playerRigidbody2D.gravityScale = 15;
                 }
                 if (jumpState == JumpState.cannotJump && PlayerInputSystem.instance.humanInCharge)
                 {
                     DashFunction2(new Vector2(0.5f, -0.5f));
-                    playerRigidbody2D.gravityScale = 15;
+                    playerRigidbody2D.gravityScale = -15;
                 }
 
             }
