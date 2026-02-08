@@ -110,6 +110,23 @@ public class PlayerInputSystem : MonoBehaviour
     private void Update()
     {
         HandleAllInputs();
+        
+    }
+
+    public void HandleAnimation()
+    {
+        if(dash)
+            GameManager.Instance.SetAnimationSprite("Dash");
+        else if(jump)
+            GameManager.Instance.SetAnimationSprite("Jump");
+        else if(moveAmount>0.1f)
+            GameManager.Instance.SetAnimationSprite("Run");
+        else if(stop)
+            GameManager.Instance.SetAnimationSprite("Brake");
+        else
+        {
+            GameManager.Instance.SetAnimationSprite("Idle");
+        }
     }
     private void HandleAllInputs()
     {
@@ -144,6 +161,7 @@ public class PlayerInputSystem : MonoBehaviour
     {
         if (jump)
         {
+            GameManager.Instance.SetAnimationSprite("Jump");
             jump = false;
             Debug.Log("test jump");
         }
@@ -152,6 +170,7 @@ public class PlayerInputSystem : MonoBehaviour
     {
         if (dash)
         {
+            GameManager.Instance.SetAnimationSprite("Dash");
             dash = false;
             Debug.Log("test dash");
         }
@@ -160,6 +179,7 @@ public class PlayerInputSystem : MonoBehaviour
     {
         if (stop)
         {
+            GameManager.Instance.SetAnimationSprite("Brake");
             stop = false;
             Debug.Log("test stop");
         }
@@ -172,10 +192,12 @@ public class PlayerInputSystem : MonoBehaviour
         moveAmount = Mathf.Clamp01(Mathf.Abs(verticalInput) + Mathf.Abs(horizontalInput));
         if (moveAmount <= 0.5 && moveAmount > 0)
         {
+            GameManager.Instance.SetAnimationSprite("Idle");
             moveAmount = 0.5f;
         }
         else if (moveAmount >0.5 && moveAmount <= 1)
         {
+            GameManager.Instance.SetAnimationSprite("Run");
             moveAmount = 1;
         }
     }

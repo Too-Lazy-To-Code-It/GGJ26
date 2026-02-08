@@ -64,7 +64,6 @@ namespace Code.Managers
             if (isDashing)
                 return;
             playerRigidbody2D.linearVelocity = new Vector2(-1 * speed, playerRigidbody2D.linearVelocity.y);
-
         }
         public void HandleJump()
         {
@@ -91,6 +90,7 @@ namespace Code.Managers
             HandleMiniAbility();
             HandleFreezeAbility();
         }
+        
         public void PerformSkills()
         {
             foreach (var effect in data.skills)
@@ -208,7 +208,6 @@ namespace Code.Managers
             ));
             canUseDash = false;
             yield return new WaitForSeconds(5f);
-
             canUseDash = true;
         }
         public void HandleMiniAbility()
