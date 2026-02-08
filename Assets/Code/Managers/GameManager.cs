@@ -135,7 +135,7 @@ namespace Code.Managers
         public void ChangeGravityAndSprite()
         {
             ChangeGravity();
-            if (ActivePlayerIndex == 1)
+           if (ActivePlayerIndex == 1)
                 player.transform.rotation = Quaternion.Euler(180, 0, 0);
             else
             {

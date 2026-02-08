@@ -49,6 +49,8 @@ namespace Code.Managers
         private bool freezeActive = false;
         private bool freezeLocked = false;      // true if meter hit max
         private float freezeCooldownTimer = 0f;
+        
+        public GameObject projectilePrefab;
         private void Awake()
         {
             if(Instance == null)
@@ -95,6 +97,7 @@ namespace Code.Managers
             HandleJump();
             HandleMovement();
             HandleMiniAbility();
+            HandleMajorAbility();
             HandleFreezeAbility();
         }
         
@@ -238,6 +241,13 @@ namespace Code.Managers
             Destroy(gameObject);
             canUseMiniAbilityMask = true;
         }
+
+        public void MajorAbilityMask()
+        {
+            canUseMajorAbilityMask = false;
+            GameObject gameObject = Instantiate(projectilePrefab, transform.position, transform.rotation);
+            canUseMajorAbilityMask = true;
+        }
         public void HandleMajorAbility()
         {
 
@@ -247,7 +257,7 @@ namespace Code.Managers
             }
             if (PlayerInputSystem.instance.abilityInput && PlayerInputSystem.instance.humanInCharge == true)
             {
-                //StartCoroutine();
+                MajorAbilityMask();
             }
         }
         private IEnumerator MajorAbilityCoroutineMask()
