@@ -30,6 +30,7 @@ namespace Code.UI
         
             transform.DOScale(OriginalScale, duration)
                 .SetEase(Ease.InOutSine);
+            
         }
     }
 }
